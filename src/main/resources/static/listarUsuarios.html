@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuários - AppRH</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .lista-card {
+            background-color: white;
+            width: 100%;
+            max-width: 600px;
+            padding: 25px;
+            border: 1px solid #dedee3;
+            border-radius: 18px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #18181b;
+            margin: 0 0 22px;
+        }
+
+        .tabela-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #dedee3;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3f4f6;
+            color: #18181b;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: white;
+            color: #333333;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            color: #18181b;
+            font-size: 13px;
+            text-decoration: underline;
+        }
+
+        .links a:hover {
+            color: #555555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lista-card">
+        <h2>Lista de Usuários</h2>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Perfil</th>
+                    </tr>
+                </thead>
+
+                <tbody id="userBody"></tbody>
+            </table>
+        </div>
+
+        <div class="links">
+            <a href="cadastrarUsuario.html">Cadastrar Usuário</a>
+            <a href="/auth/logout">Sair</a>
+        </div>
+    </div>
+
+    <script>
+        async function loadUsers() {
+            try {
+                const res = await fetch('users/list');
+                const list = await res.json();
+
+                const tbody = document.getElementById('userBody');
+                tbody.innerHTML = '';
+
+                list.forEach(u => {
+                    const row = `<tr>
+                        <td>${u.username}</td>
+                        <td>${u.role}</td>
+                    </tr>`;
+
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AppRH</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-card {
+            background-color: white;
+            width: 100%;
+            max-width: 390px;
+            padding: 36px;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .icone {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background-color: #18181b;
+            color: white;
+            border-radius: 12px;
+            font-size: 22px;
+            margin-bottom: 26px;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: 25px;
+            color: #18181b;
+        }
+
+        .subtitulo {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dedee3;
+            border-radius: 0px;
+            font-size: 14px;
+            margin-bottom: 22px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #18181b;
+        }
+
+	    button {
+		    display: block;
+		    width: auto;
+		    margin: 0 auto;
+		    padding: 5px;
+		    background: transparent;
+		    color: #18181b;
+		    border: none;
+		    border-bottom: 1px solid #18181b;
+		    border-radius: 0;
+		    font-size: 14px;
+		    cursor: pointer;
+		}
+		
+		button:hover {
+		    background: transparent;
+}
+
+        #mensagem {
+            color: #c62828;
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+
+        <h2>Bem-vindo ao AppRH</h2>
+
+        <p class="subtitulo">
+            Entre com seus dados para continuar.
+        </p>
+
+        <form id="loginForm">
+
+            <label for="username">Usuário</label>
+            <input
+                type="text"
+                id="username"
+                placeholder="Digite seu usuário"
+                required
+            >
+
+            <label for="password">Senha</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="Digite sua senha"
+                required
+            >
+
+            <button type="submit">Entrar</button>
+
+        </form>
+
+        <p id="mensagem"></p>
+
+    </div>
+
+    <script>
+        document.getElementById("loginForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const username =
+                    document.getElementById("username").value;
+
+                const password =
+                    document.getElementById("password").value;
+
+                // Envia os dados para o controlador
+                const resposta = await fetch("/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                if (resposta.ok) {
+
+                    const role = await resposta.text();
+
+                    // Redireciona conforme a permissão
+                    if (role === "ADMIN") {
+                        window.location.href =
+                            "cadastrarFuncionario.html";
+                    } else {
+                        window.location.href =
+                            "listarFuncionarios.html";
+                    }
+
+                } else {
+
+                    document.getElementById("mensagem")
+                        .textContent =
+                            "Usuário ou senha incorretos!";
+                }
+            });
+    </script>
+
+</body>
+</html>

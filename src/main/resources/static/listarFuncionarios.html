@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Funcionários - AppRH</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .lista-card {
+            background-color: white;
+            width: 100%;
+            max-width: 700px;
+            padding: 25px;
+            border: 1px solid #dedee3;
+            border-radius: 18px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #18181b;
+            margin: 0 0 22px;
+        }
+
+        .tabela-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #dedee3;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3f4f6;
+            color: #18181b;
+        }
+
+        td {
+            background-color: white;
+            color: #333333;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            margin-top: 24px;
+        }
+
+        .links a {
+            color: #18181b;
+            font-size: 13px;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lista-card">
+        <h2>Lista de Funcionários</h2>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Cargo</th>
+                        <th>Salário</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelaFuncionarios"></tbody>
+            </table>
+        </div>
+
+        <div class="links">
+            <a href="cadastrarFuncionario.html">Cadastrar Funcionário</a>
+            <a href="/auth/logout">Sair</a>
+        </div>
+    </div>
+
+    <script>
+        async function listarFuncionarios() {
+            const res = await fetch('/funcionarios/list');
+
+            if (res.ok) {
+                const funcionarios = await res.json();
+                const tabela = document.getElementById('tabelaFuncionarios');
+
+                tabela.innerHTML = '';
+
+                funcionarios.forEach(f => {
+                    const linha = document.createElement('tr');
+
+                    [
+                        f.id,
+                        f.nome,
+                        f.cargo,
+                        Number(f.salario).toFixed(2)
+                    ].forEach(valor => {
+                        const coluna = document.createElement('td');
+                        coluna.textContent = valor;
+                        linha.appendChild(coluna);
+                    });
+
+                    tabela.appendChild(linha);
+                });
+            } else {
+                alert('Erro ao listar funcionários');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', listarFuncionarios);
+    </script>
+</body>
+</html>
