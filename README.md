@@ -1,9 +1,8 @@
 **AppRH**
 
-O AppRH é um sistema que desenvolvi na materia de Desenvolvimento de Sistemas Corporativos, para o cadastro e a listagem de funcionários, com login e controle de acesso.
-Utilizei o projeto para implementar testes automatizados, integração contínua e deploy automático.
+O AppRH é um sistema que desenvolvi na disciplina de Desenvolvimento de Sistemas Corporativos, para cadastro e listagem de funcionários e usuários, com login e controle de acesso. Para a disciplina de Desenvolvimento Web para a Nuvem, utilizei o projeto para implementar testes automatizados, integração contínua e implantação automática.
 
-**Tecnologias utilizadas**
+**Ferramentas utilizadas**
 
 Java 25, Spring Boot, Maven, MariaDB, HTML, CSS, JavaScript, JUnit, Mockito, Node.js, Git, GitHub, GitHub Actions, Docker, Render e Enzonic Databases.
 
@@ -13,35 +12,54 @@ Java 25, Spring Boot, Maven, MariaDB, HTML, CSS, JavaScript, JUnit, Mockito, Nod
 
 Abra o CMD do Windows e execute os comandos abaixo para baixar o projeto e acessar sua pasta:
 
-*git clone https://github.com/RobertaTargino/AppRH-CI-CD.git
-cd AppRH-CI-CD*
+*git clone https://github.com/RobertaTargino/AppRH-CI-CD.git*
+
+*cd AppRH-CI-CD*
 
 **Configuração do banco de dados**
 
 Abra o MariaDB e execute o comando para criar o banco:
 
-
 *CREATE DATABASE apprh;*
 
-Utilizei a porta 3307 do MariaDB. Caso esteja utilizando outra porta, altere essa informação no arquivo `src/main/resources/application.properties`.
+Utilizei a porta 3307 do MariaDB. Caso esteja utilizando outra porta, altere essa informação no arquivo src/main/resources/application.properties.
 
 Volte ao CMD e configure o usuário e a senha do seu MariaDB:
 
-*set DB_USERNAME=root
-set DB_PASSWORD=sua_senha*
+*set DB_USERNAME=root*
 
-Substitua os valores pelas seus dados. 
+*set DB_PASSWORD=digite a sua senha aqui*
+
+Substitua os valores pelos seus dados.
+
 **Iniciando o sistema**
 
 No mesmo CMD, execute:
 
 *mvn spring-boot:run*
 
-As tabelas serão criadas automaticamente pelo Hibernate. Após a inicialização, mantenha o CMD aberto e acesse pelo navegador:
+As tabelas serão criadas automaticamente pelo Hibernate. Após a inicialização, mantenha o CMD aberto.
+
+Para realizar o primeiro login, é necessário cadastrar um usuário no banco de dados. Abra o MariaDB e execute:
+
+```
+USE apprh;
+
+INSERT INTO users (username, password, role)
+VALUES (
+    'teste',
+    '$2a$12$MDo5RkUEND8Jfo1NMyp83O9.594DUgU/vKqwB2v6ePBJ2q2mnyRie',
+    'ADMIN'
+);
+```
+
+Após cadastrar o usuário, acesse pelo navegador:
 
 *http://localhost:8080/login.html*
 
-Para realizar o primeiro login, é necessário cadastrar um usuário no banco com senha criptografada utilizando BCrypt.
+Usuário: teste
+
+Senha: teste123
 
 **Testes do backend**
 
@@ -63,10 +81,18 @@ Os resultados dos testes podem ser visualizados no próprio terminal.
 
 **Integração contínua (CI)**
 
-Configurei o GitHub Actions por meio do arquivo *.github/workflows/ci.yml*, que executa automaticamente os testes do backend e do frontend sempre que uma alteração é enviada para a branch main.
+Configurei o GitHub Actions por meio do arquivo .github/workflows/ci.yml, que executa automaticamente os testes do backend e do frontend sempre que uma alteração é enviada para a branch main.
 
-**Deploy automático (CD)**
+**Implantação automática (CD)**
 
 Utilizei o Render para hospedar a aplicação, o Docker para preparar o ambiente de execução e o Enzonic para hospedar o banco de dados.
 
 Configurei o deploy automático para acontecer somente após a aprovação dos testes do GitHub Actions.
+
+**Acesso ao sistema online**
+
+Disponibilizei o sistema na nuvem para facilitar a avaliação, sem a necessidade de instalar programas ou configurar o banco de dados.
+
+https://apprh-ci-cd.onrender.com/login.html
+
+Os dados de acesso serão disponibilizados junto à entrega da atividade.
